@@ -12,4 +12,7 @@ docker run --rm \
 ## API Test
 ```sh
 curl -i http://127.0.0.1:8000/auth/test/
+curl -i -X POST -H "Content-Type: application/json" \
+    -d '{"message": "test data"}' \
+    http://127.0.0.1:8000/auth/test/
 ```
