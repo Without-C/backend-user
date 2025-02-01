@@ -8,3 +8,8 @@ docker run --rm \
     --name without-c-backend-user \
     without-c-backend-user
 ```
+
+## API Test
+```sh
+curl -i http://127.0.0.1:8000/auth/test/
+```
