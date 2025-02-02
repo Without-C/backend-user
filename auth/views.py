@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 from django.shortcuts import redirect
 from django.conf import settings
 from django.http import JsonResponse
+from django.core.files.base import ContentFile
 from user.models import CustomUser
 
 def test_view(request):
@@ -58,10 +59,12 @@ def callback_42(request):
     # print(profile['avatar_content'])
     # print(profile['avatar_filename'])
 
-    user, _ = CustomUser.objects.get_or_create(oauth_id_42=profile['id'])
-    user.username = profile['username']
-
-    user.save()
+    user, created = CustomUser.objects.get_or_create(oauth_id_42=profile['id'])
+    if created:
+        user.username = profile['username']
+        if profile['avatar_content'] != None:
+            user.avatar.save(profile['avatar_filename'], ContentFile(profile['avatar_content']))
+        user.save()
 
     return redirect('/')
 
