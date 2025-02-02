@@ -3,6 +3,7 @@ import requests
 from django.shortcuts import redirect
 from django.conf import settings
 from django.http import JsonResponse
+from user.models import CustomUser
 
 def test_view(request):
     if request.method == 'GET':
@@ -49,9 +50,12 @@ def callback_42(request):
     access_token = response.json()['access_token']
 
     profile = get_profile_42(access_token)
-    print(profile['id'])
-    # print(profile['username'])
     # print(profile['avatar'])
+
+    user, _ = CustomUser.objects.get_or_create(oauth_id_42=profile['id'])
+    user.username = profile['username']
+
+    user.save()
 
     return redirect('/')
 
