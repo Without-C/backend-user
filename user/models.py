@@ -1,3 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-# Create your models here.
+class CustomUser(AbstractUser):
+    avatar = models.FileField(null=True, upload_to='avatars/')

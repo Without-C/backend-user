@@ -124,6 +124,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTH_USER_MODEL = 'user.CustomUser'
+
 OAUTH_UID_42 = os.environ.get('OAUTH_UID_42')
 OAUTH_SECRET_42 = os.environ.get('OAUTH_SECRET_42')
 OAUTH_REDIRECT_42 = os.environ.get('OAUTH_REDIRECT_42')
