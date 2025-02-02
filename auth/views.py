@@ -73,16 +73,15 @@ def callback_42(request):
 
     # JWT 생성
     refresh_token_obj = RefreshToken.for_user(user)
-    access_token_obj = refresh_token_obj.access_token
-    access_token_obj['username'] = user.username
-    access_token_obj['avatar_url'] = os.path.basename(user.avatar.name) if user.avatar else ''
-    access_token_str = str(access_token_obj)
+    access_token_str = str(refresh_token_obj.access_token)
     refresh_token_str = str(refresh_token_obj)
 
     # response 생성
     response = redirect('/')
     response.set_cookie('jwt', access_token_str, httponly=True, secure=True)
     response.set_cookie('jwt_refresh', refresh_token_str, httponly=True, secure=True)
+    response.set_cookie('username', user.username)
+    response.set_cookie('avatar_url', os.path.basename(user.avatar.name) if user.avatar else '')
     return response
 
 def get_profile_42(access_token):
@@ -122,4 +121,6 @@ def logout(request):
     response = redirect('/')
     response.delete_cookie('jwt')
     response.delete_cookie('jwt_refresh')
+    response.delete_cookie('username')
+    response.delete_cookie('avatar_url')
     return response
