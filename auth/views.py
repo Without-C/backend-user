@@ -56,8 +56,6 @@ def callback_42(request):
     profile = get_profile_42(access_token)
     if profile == None:
         return redirect('/')
-    # print(profile['avatar_content'])
-    # print(profile['avatar_filename'])
 
     user, created = CustomUser.objects.get_or_create(oauth_id_42=profile['id'])
     if created:
