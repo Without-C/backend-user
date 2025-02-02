@@ -75,7 +75,7 @@ def callback_42(request):
     refresh_token_obj = RefreshToken.for_user(user)
     access_token_obj = refresh_token_obj.access_token
     access_token_obj['username'] = user.username
-    access_token_obj['avatar_url'] = user.avatar.url if user.avatar else ''
+    access_token_obj['avatar_url'] = os.path.basename(user.avatar.name) if user.avatar else ''
     access_token_str = str(access_token_obj)
     refresh_token_str = str(refresh_token_obj)
 
