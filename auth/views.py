@@ -50,6 +50,8 @@ def callback_42(request):
     access_token = response.json()['access_token']
 
     profile = get_profile_42(access_token)
+    if profile == None:
+        return redirect('/')
     # print(profile['avatar'])
 
     user, _ = CustomUser.objects.get_or_create(oauth_id_42=profile['id'])
