@@ -1,5 +1,8 @@
+import os
 import json
+import uuid
 import requests
+from urllib.parse import urlparse
 from django.shortcuts import redirect
 from django.conf import settings
 from django.http import JsonResponse
@@ -52,7 +55,8 @@ def callback_42(request):
     profile = get_profile_42(access_token)
     if profile == None:
         return redirect('/')
-    # print(profile['avatar'])
+    # print(profile['avatar_content'])
+    # print(profile['avatar_filename'])
 
     user, _ = CustomUser.objects.get_or_create(oauth_id_42=profile['id'])
     user.username = profile['username']
@@ -68,11 +72,20 @@ def get_profile_42(access_token):
             return None
         return response.content
 
+    def get_random_filename(image_url):
+        original_filename = os.path.basename(urlparse(image_url).path)
+        _, ext = os.path.splitext(original_filename)
+        random_filename = uuid.uuid4().hex
+        return f"{random_filename}{ext}"
+
     response = requests.get('https://api.intra.42.fr/v2/me', headers={'Authorization': f'Bearer {access_token}'})
     if response.status_code != 200:
         return None
+
+    image_url = response.json()['image']['link']
     return {
         'id': response.json()['id'],
         'username': response.json()['login'],
-        'avatar': get_image_file(response.json()['image']['link']),
+        'avatar_content': get_image_file(image_url),
+        'avatar_filename': get_random_filename(image_url)
     }
