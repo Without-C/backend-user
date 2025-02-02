@@ -49,8 +49,8 @@ def callback_42(request):
     access_token = response.json()['access_token']
 
     profile = get_profile_42(access_token)
-    # print(profile['login'])
-    # print(profile['image'])
+    # print(profile['username'])
+    # print(profile['avatar'])
 
     return redirect('/')
 
@@ -65,6 +65,6 @@ def get_profile_42(access_token):
     if response.status_code != 200:
         return None
     return {
-        'login': response.json()['login'],
-        'image': get_image_file(response.json()['image']['link']),
+        'username': response.json()['login'],
+        'avatar': get_image_file(response.json()['image']['link']),
     }
