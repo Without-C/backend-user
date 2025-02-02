@@ -8,6 +8,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.core.files.base import ContentFile
 from user.models import CustomUser
+from rest_framework_simplejwt.tokens import RefreshToken
 
 def test_view(request):
     """
@@ -70,7 +71,13 @@ def callback_42(request):
             user.avatar.save(profile['avatar_filename'], ContentFile(profile['avatar_content']))
         user.save()
 
-    return redirect('/')
+    # JWT 생성
+    refresh_token = RefreshToken.for_user(user)
+    jwt_access_token = str(refresh_token.access_token)
+    response = redirect('/')
+    response.set_cookie('jwt', jwt_access_token, httponly=True, secure=True)
+    response.set_cookie('user_name', user.username)
+    return response
 
 def get_profile_42(access_token):
     def get_image_file(image_url):
