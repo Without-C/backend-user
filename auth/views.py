@@ -76,7 +76,6 @@ def callback_42(request):
     jwt_access_token = str(refresh_token.access_token)
     response = redirect('/')
     response.set_cookie('jwt', jwt_access_token, httponly=True, secure=True)
-    response.set_cookie('user_name', user.username)
     return response
 
 def get_profile_42(access_token):
@@ -111,3 +110,8 @@ def get_profile_42(access_token):
         'avatar_content': get_image_file(image_url),
         'avatar_filename': get_random_filename(image_url)
     }
+
+def logout(request):
+    response = redirect('/')
+    response.delete_cookie('jwt')
+    return response
