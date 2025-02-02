@@ -48,8 +48,17 @@ def callback_42(request):
 
     access_token = response.json()['access_token']
 
-    # profile = get_profile_42(access_token)
-    # print(profile.login)
-    # print(profile.image)
+    profile = get_profile_42(access_token)
+    # print(profile['login'])
+    # print(profile['image'])
 
     return redirect('/')
+
+def get_profile_42(access_token):
+    response = requests.get('https://api.intra.42.fr/v2/me', headers={'Authorization': f'Bearer {access_token}'})
+    if response.status_code != 200:
+        return None
+    return {
+        'login': response.json()['login'],
+        'image': response.json()['image']['link'],
+    }
