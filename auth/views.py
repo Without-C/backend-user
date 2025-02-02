@@ -110,7 +110,7 @@ def get_profile_42(access_token):
         return None
 
     # 얻은 사용자 정보 중 intra id와 profile 사진을 추출
-    image_url = response.json()['image']['link']
+    image_url = response.json()['image']['versions']['small']
     return {
         'id': response.json()['id'],
         'username': response.json()['login'],
