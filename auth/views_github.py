@@ -16,3 +16,30 @@ def login_redirect_github(request):
     """
     redirect_uri = f'https://github.com/login/oauth/authorize?client_id={settings.OAUTH_UID_GITHUB}&redirect_uri={settings.OAUTH_REDIRECT_GITHUB}'
     return redirect(redirect_uri)
+
+def callback_github(request):
+    code = request.GET.get('code')
+
+    # 42 서버로부터 access token 가져오기
+    response = requests.post(
+        "https://github.com/login/oauth/access_token",
+        headers={
+            'Accept': 'application/json',
+        },
+        data={
+            'client_id': settings.OAUTH_UID_GITHUB,
+            'client_secret': settings.OAUTH_SECRET_GITHUB,
+            'code': code,
+            'redirect_uri': settings.OAUTH_REDIRECT_GITHUB,
+        }
+    )
+    if response.status_code != 200:
+        # 42 서버로부터 access code 받아오는 것을 실패하면 어떻게 예외 처리하지?
+        return redirect('/')
+
+    # 가져온 access token으로 사용자 이름, 사진 가져오기
+    access_token = response.json()['access_token']
+
+    # response 생성
+    response = redirect('/')
+    return response

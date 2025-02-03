@@ -10,4 +10,5 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
 
     path('login/github/', views_github.login_redirect_github, name='login_redirect_github'),
+    path('callback/github/', views_github.callback_github, name='callback_github'),
 ]
