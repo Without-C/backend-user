@@ -9,7 +9,7 @@ from .utils import get_image_file, get_random_filename
 
 def login_redirect_github(request):
     """
-    42 로그인 페이지로 redirect
+    GitHub 로그인 페이지로 redirect
     """
     redirect_uri = f'https://github.com/login/oauth/authorize?client_id={settings.OAUTH_UID_GITHUB}&redirect_uri={settings.OAUTH_REDIRECT_GITHUB}'
     return redirect(redirect_uri)
@@ -17,7 +17,7 @@ def login_redirect_github(request):
 def callback_github(request):
     code = request.GET.get('code')
 
-    # 42 서버로부터 access token 가져오기
+    # GitHub 서버로부터 access token 가져오기
     response = requests.post(
         "https://github.com/login/oauth/access_token",
         headers={
@@ -31,7 +31,7 @@ def callback_github(request):
         }
     )
     if response.status_code != 200:
-        # 42 서버로부터 access code 받아오는 것을 실패하면 어떻게 예외 처리하지?
+        # GitHub 서버로부터 access code 받아오는 것을 실패하면 어떻게 예외 처리하지?
         return redirect('/')
 
     # 가져온 access token으로 사용자 이름, 사진 가져오기
@@ -63,7 +63,7 @@ def callback_github(request):
     return response
 
 def get_profile_github(access_token):
-    # access token을 이용하여 42 서버에 사용자 정보 요청
+    # access token을 이용하여 GitHub 서버에 사용자 정보 요청
     response = requests.get('https://api.github.com/user', headers={'Authorization': f'Bearer {access_token}'})
     if response.status_code != 200:
         return None
