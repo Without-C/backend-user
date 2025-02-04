@@ -36,7 +36,6 @@ def callback_github(request):
 
     # 가져온 access token으로 사용자 이름, 사진 가져오기
     access_token = response.json()['access_token']
-
     profile = get_profile_github(access_token)
     if profile == None:
         return redirect('/')
